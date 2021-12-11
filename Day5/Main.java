@@ -16,20 +16,23 @@ public class Main {
             System.out.println(e);
             inputs = null;
         }
-        ArrayList<String> currentAges = inputs;
-        for (int count = 0; count < 100; count++) {
-            ArrayList<String> nextAges = new ArrayList<String>();
-            for (String currentFish : currentAges) {
-                int currentAge = Integer.parseInt(currentFish);
-                currentAge--;
-                if (currentAge < 0) {
-                    currentAge = 6;
-                    nextAges.add("8");
-                }
-                nextAges.add(currentAge + "");
-            }
-            currentAges = nextAges;
+        long[] ages = new long[9];
+        for (String currentFish : inputs) {
+            int currentAge = Integer.parseInt(currentFish);
+            ages[currentAge] += 1;
         }
-        System.out.println(currentAges.size());
+        for (int count = 0; count < 256; count++) {
+            long[] newAges = new long[9];
+            for (int index = 1; index < 9; index++) {
+                newAges[index - 1] = ages[index];
+            }
+            newAges[6] += ages[0];
+            newAges[8] += ages[0];
+            ages = newAges;
+        }
+        for (long age : ages) {
+            // System.out.println(age);
+            System.out.println(Arrays.stream(ages).sum());
+        }
     }
 }
