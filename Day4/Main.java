@@ -20,12 +20,12 @@ public class Main {
             in.nextLine();
             while (in.hasNextLine()) {
                 String line = in.nextLine();
-                if (line.isBlank()) {
-                    boards.add(new Board(boardInput));
-                    boardInput = new ArrayList<String>();
-                } else {
-                    boardInput.add(line.replace("  ", " ").trim());
-                }
+                // // if (line.isBlank()) {
+                // boards.add(new Board(boardInput));
+                // boardInput = new ArrayList<String>();
+                // } else {
+                // boardInput.add(line.replace(" ", " ").trim());
+                // }
             }
             boards.add(new Board(boardInput));
         } catch (Exception e) {
