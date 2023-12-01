@@ -1,4 +1,4 @@
-package Day7;
+package y2021.Day7;
 
 import java.io.File;
 import java.util.ArrayList;

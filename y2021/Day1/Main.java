@@ -1,4 +1,4 @@
-package Day1;
+package y2021.Day1;
 
 import java.io.InputStream;
 

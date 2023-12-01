@@ -1,4 +1,4 @@
-package Day4;
+package y2021.Day4;
 
 public class Number {
     private boolean active = false;
