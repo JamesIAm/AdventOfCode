@@ -29,14 +29,17 @@ public class TypeFactory {
 
     public static Type getType(List<Card> cards) {
         TreeMap<CardValue, Integer> cardCount = new TreeMap<>();
+        int jokerCount = 0;
         for (Card card : cards) {
-            int currentVal = cardCount.getOrDefault(card.getCardValue(), 0);
-//            if (card.isJoker()) {
-//                for (Card cardIterator: Card)
-//                cardCount.put()
-//            } else {
-                cardCount.put(card.getCardValue(), currentVal + 1);
-//            }
+            if (card.isJoker()) {
+                jokerCount++;
+                for (CardValue cardIterator: CardValue.values()) {
+                    increaseCount(cardCount, cardIterator);
+                }
+            } else {
+                CardValue cardValue = card.getCardValue();
+                increaseCount(cardCount, cardValue);
+            }
         }
         if (cardCount.size() == 1) {
             return new FiveOfAKind(cards.get(0).getCardValue());
@@ -46,7 +49,13 @@ public class TypeFactory {
 
         Map.Entry<CardValue, Integer> higherPower = listOfCardCounts.get(0);
         Map.Entry<CardValue, Integer> lowerPower = listOfCardCounts.get(1);
+        if (lowerPower.getKey() != CardValue.JACK){
+            lowerPower.setValue(lowerPower.getValue() - jokerCount);
+        }
 
+        if (higherPower.getValue() == 5) {
+            return new FiveOfAKind(higherPower.getKey());
+        }
         if (higherPower.getValue() == 4) {
             return new FourOfAKind(higherPower.getKey());
         }
@@ -64,5 +73,10 @@ public class TypeFactory {
         }
 
         return new HighCard(higherPower.getKey());
+    }
+
+    private static void increaseCount(TreeMap<CardValue, Integer> cardCount, CardValue cardValue) {
+        int currentVal = cardCount.getOrDefault(cardValue, 0);
+        cardCount.put(cardValue, currentVal + 1);
     }
 }

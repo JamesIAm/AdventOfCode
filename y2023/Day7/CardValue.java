@@ -8,7 +8,6 @@ public enum CardValue implements Comparable<CardValue>{
         ACE('A'),
         KING('K'),
         QUEEN('Q'),
-        JACK('J'),
         TEN('T'),
         NINE('9'),
         EIGHT('8'),
@@ -17,7 +16,8 @@ public enum CardValue implements Comparable<CardValue>{
         FIVE('5'),
         FOUR('4'),
         THREE('3'),
-        TWO('2');
+        TWO('2'),
+        JACK('J');
         private final char letter;
         private static final Map<Character, CardValue> letterMap;
         static {
