@@ -1,6 +1,10 @@
 package y2023.Day8;
 
+import static java.lang.String.format;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -13,30 +17,67 @@ public class Main {
         List<String> input = ReadFile.readInput(8);
         LeftRightInstructions leftRightInstructions = new LeftRightInstructions(input.get(0));
         List<String> nodeInput = input.subList(2, input.size());
-        Node aaa = createNodes(nodeInput);
-        Node currentNode = aaa;
+        List<Node> currentNodes = createNodes(nodeInput);
         int count = 0;
         do {
             LeftRight next = leftRightInstructions.getNext();
-            if (next == LeftRight.LEFT) {
-                currentNode = currentNode.getLeft();
-            } else {
-                currentNode = currentNode.getRight();
+            currentNodes = getNewNodes2(currentNodes, next);
+            if (count % 10000000 == 0) {
+                System.out.printf("Depth: %d%n", count);
             }
             count++;
-        } while (!currentNode.isTerminal());
+        } while (!areAllNodesTerminal(currentNodes));
         System.out.println(count);
     }
 
-    private static Node createNodes(List<String> nodeInput) {
+    private static List<Node> getNewNodes(List<Node> currentNodes, LeftRight next) {
+        return currentNodes.stream().map(currentNode -> getNextNode(next, currentNode)).toList();
+    }
+
+    private static List<Node> getNewNodes2(List<Node> currentNodes, LeftRight next) {
+        for (int i = 0; i < currentNodes.size(); i++) {
+            currentNodes.add(i, getNextNode(next, currentNodes.get(i)));
+        }
+        return currentNodes;
+    }
+
+    private static boolean areAllNodesTerminal(List<Node> currentNodes) {
+//        System.out.println(currentNodes);
+        for (Node node : currentNodes) {
+            if (!node.isTerminal()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static Node getNextNode(LeftRight nextInstruction, Node currentNode) {
+        if (nextInstruction == LeftRight.LEFT) {
+            return currentNode.getLeft();
+        } else {
+            return currentNode.getRight();
+        }
+    }
+
+    private static List<Node> createNodes(List<String> nodeInput) {
         Map<String, Node> emptyNodes = createEmptyNodes(nodeInput);
         Map<String, Node> filledNodes = fillNodes(emptyNodes, nodeInput);
-        return filledNodes.get("AAA");
+        return getStartNodes(filledNodes);
+    }
+
+    private static List<Node> getStartNodes(Map<String, Node> filledNodes) {
+        List<Node> startNodes = new LinkedList<>();
+        for (Map.Entry<String, Node> node : filledNodes.entrySet()) {
+            if (node.getKey().charAt(node.getKey().length() - 1) == 'A') {
+                startNodes.add(node.getValue());
+            }
+        }
+        return startNodes;
     }
 
     private static Map<String, Node> fillNodes(Map<String, Node> nodes, List<String> nodeInput) {
         for (String line : nodeInput) {
-            Pattern leftAndRightPattern = Pattern.compile("([A-Z]+).*\\(([A-Z]+), ([A-Z]+)\\).*");
+            Pattern leftAndRightPattern = Pattern.compile("([A-Z0-9]+).*\\(([A-Z0-9]+), ([A-Z0-9]+)\\).*");
             Matcher matcher = leftAndRightPattern.matcher(line);
             matcher.find();
             String parentCode = matcher.group(1);

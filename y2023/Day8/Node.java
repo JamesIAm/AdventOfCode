@@ -9,7 +9,7 @@ public class Node {
     private Node right;
     public Node(String nodeCode) {
         this.nodeCode = nodeCode;
-        this.isTerminal = this.nodeCode.equals("ZZZ");
+        this.isTerminal = this.nodeCode.charAt(nodeCode.length() - 1) == 'Z';
 
     }
 
@@ -30,5 +30,10 @@ public class Node {
     }
     public Node getRight() {
         return right;
+    }
+
+    @Override
+    public String toString() {
+        return nodeCode;
     }
 }
